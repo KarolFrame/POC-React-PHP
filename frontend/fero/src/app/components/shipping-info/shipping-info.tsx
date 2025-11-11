@@ -18,17 +18,55 @@ const ShippingStep = ({onNext, onBack}: ShippingStepProps) => {
         phone:""
     };
     const [form, setForm] = useState(context?.shipping || defaultForm)
-    
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>{
         setForm({...form, [e.target.name]: e.target.value});
     };
 
-    const handleSubmit = (e: React.FormEvent) =>{
-        e.preventDefault();
-        if(Object.values(form).some(v => !v))
-            return toast.error("All fields requiered");
+    const _itsAllFields = () => {
+        if(Object.values(form).some(v => !v)){
+            toast.error("All fields requiered");
+            return false;
+        }
+        return true;
+    }
+
+    const _itsEmail = () => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(form.email)) {
+            toast.error("Please enter a valid email address");
+            return false;
+        }
+        return true;
+    }
+
+    const _itsPhoneNumber = () =>{
+        const phoneRegex = /^\d+$/;
+        if (!phoneRegex.test(form.phone)) {
+            toast.error("Phone must contain only numbers");
+            return false;
+        }
+        return true;
+    }
+
+    const _validateFields = () =>{
+        if (!_itsAllFields()) return false;
+        if (!_itsEmail()) return false;
+        if (!_itsPhoneNumber()) return false;
+        
+        return true;
+    }
+    const _saveShippingInfo = () => {
         context?.setShipping(form);
         toast.success("Shipping info saved");
+    }
+
+    const handleSubmit = (e: React.FormEvent) =>{
+        e.preventDefault();
+
+        if(!_validateFields()) return;
+        
+        _saveShippingInfo();
         onNext();
     };
 

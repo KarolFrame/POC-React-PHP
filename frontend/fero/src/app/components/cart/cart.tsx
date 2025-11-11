@@ -17,15 +17,38 @@ const CartStep = ( {onNext}: CartStepProps) =>{
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
-    useEffect(()=>{
+    const _getCartPromises = () => {
         const minTime = new Promise(resolve => setTimeout(resolve, 1000));
         const fetchData = fetch(`${API_URL}/cart`)
             .then(res => res.json())
             .then(data => context?.setCart(data))
-            .catch(() => setError("Failed to fetch cart"));
+            .catch(() => {
+                throw new Error("Failed to fetch cart");
+            });
+        return [minTime, fetchData];
+    };
 
-            Promise.all([minTime, fetchData])
-                .finally(() => setLoading(false));
+    const _handleLoadCompletion = async (promises: Promise<any>[]) => {
+    try {
+        await Promise.all(promises); 
+    } catch (error) {
+        if (error instanceof Error) {
+            setError(error.message); 
+        } else {
+            setError("An unknown error occurred.");
+        } 
+    } finally {
+        setLoading(false);
+    }
+    };
+
+    const _loadCartData = async () => {
+        const promises = _getCartPromises();
+        _handleLoadCompletion(promises);
+    };
+
+    useEffect(()=>{
+        _loadCartData();
     },[]);
 
     if(error) 
