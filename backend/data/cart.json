@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "name": "Classic Red Cotton T-Shirt for Men",
+    "price": 10,
+    "quantity": 2,
+    "image": "https://lsco.scene7.com/is/image/lsco/A06370172-dynamic1-pdp?fmt=jpeg&qlt=70&resMode=sharp2&fit=crop,1&op_usm=0.6,0.6,8&wid=2000&hei=2500"
+  },
+  {
+    "id": 2,
+    "name": "Regular Fit Blue Denim Jeans",
+    "price": 15,
+    "quantity": 1,
+    "image": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=150&q=80"
+  },
+  {
+    "id": 3,
+    "name": "Black and White High-Top Sneakers",
+    "price": 50,
+    "quantity": 1,
+    "image": "https://www.blackstonefootwear.com/media/8d/e1/9e/1755087373/1080x1350_0095_EG560_BlackWhite_0634_Blackstone_AW25.png?ts=1755087373"
+  }
+]

@@ -1,0 +1,18 @@
+.cartItemContainer {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+  margin: 0.5rem 0;
+  padding: 1rem;
+}
+
+.cartItemImage {
+  max-height: 5rem;
+  width: 5rem;
+  object-fit: cover;
+}
+
+.quantity{
+    color: grey;
+}
