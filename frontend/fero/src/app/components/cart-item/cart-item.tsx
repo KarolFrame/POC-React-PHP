@@ -12,7 +12,7 @@ const CartStepItem = ({item}:{item: CartItem}) =>{
     return(<>
         <div className={styles.cartItemContainer}>
             <img className={styles.cartItemImage} src={item.image}/>
-            <div className="content-center">
+            <div className="text-start">
                 <p className="text-xl font-bold">{item.price}$</p>
                 <p className="text-xl">{item.name}</p>
                 <p className={styles.quantity}>Quantity: {item.quantity}</p>
