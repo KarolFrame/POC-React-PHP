@@ -55,16 +55,16 @@ FERO-Assignment/
 
 ### Features
 
-3-Step Checkout Flow 1. Cart Review → Fetch and display cart items, show total 2. Shipping Info → Form with basic validation (name, email, address, phone) 3. Payment → Fetch payment methods, select one, simulate payment submission
+1. 3-Step Checkout Flow 1. Cart Review → Fetch and display cart items, show total 2. Shipping Info → Form with basic validation (name, email, address, phone) 3. Payment → Fetch payment methods, select one, simulate payment submission
 
-Global State Management
-Cart, shipping, and payment info persist across steps using React Context.
+2. Global State Management
+   Cart, shipping, and payment info persist across steps using React Context.
 
-Error and Loading States
-Displays loading indicators and error messages for API calls.
+3. Error and Loading States
+   Displays loading indicators and error messages for API calls.
 
-Styling
-Tailwind CSS for basic styling.
+4. Styling
+   Tailwind CSS for basic styling.
 
 ### Notes
 
