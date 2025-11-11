@@ -5,6 +5,7 @@ import { CheckoutContext } from "@/context/CheckoutContext";
 import CartStepItem from "../cart-item/cart-item";
 import LoaderComponent from "../loader/loader";
 import LoaderWrapper from "../loader-wrapper/loader-wrapper";
+import { motion } from "motion/react"
 
 interface CartStepProps{
     onNext: () => void;
@@ -27,8 +28,6 @@ const CartStep = ( {onNext}: CartStepProps) =>{
                 .finally(() => setLoading(false));
     },[]);
 
-    if(loading) 
-        return <LoaderWrapper><LoaderComponent/></LoaderWrapper>;
     if(error) 
         return <p>{error}</p>
 
@@ -36,12 +35,27 @@ const CartStep = ( {onNext}: CartStepProps) =>{
 
     return(<>
         <div className="m-5 p-2">
-            <h2 className="text-3xl font-bold">CART REVIEW</h2>
-            {context?.cart.map(item=>(
-                <CartStepItem key={item.id} item={item}/>
-            ))}
-            <p className="text-xl mt-5">Total: {total}$</p>
-            <button className={Styles.nextButton} onClick={onNext}>NEXT</button>
+            {loading && (<>
+                <LoaderWrapper>
+                    <LoaderComponent/>
+                </LoaderWrapper></>
+            )}
+
+            {!loading && (<>
+            <motion.div
+            key="cart"
+            initial={{ opacity: 0, x: -100 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 100 }}
+            transition={{ duration: 0.5 }}>
+                <h2 className="text-3xl font-bold">CART REVIEW</h2>
+                {context?.cart.map(item=>(
+                    <CartStepItem key={item.id} item={item}/>
+                ))}
+                <p className="text-xl mt-5">Total: {total}$</p>
+                <button className={Styles.nextButton} onClick={onNext}>NEXT</button>
+            </motion.div>
+            </>)}
         </div>
     
     </>);

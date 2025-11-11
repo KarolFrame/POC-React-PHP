@@ -25,7 +25,7 @@ const PaymentStep = ({onBack}: PaymentStepProps) =>{
     const alertPay = (data: string) =>{
         if(data === "Payment processed successfully")
             return toast.success(data);
-        return toast.error(data);
+        return toast.error("Payment failed");
     }
 
     const handlePay = async () =>{
