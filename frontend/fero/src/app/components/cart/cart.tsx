@@ -75,7 +75,19 @@ const CartStep = ( {onNext}: CartStepProps) =>{
                 {context?.cart.map(item=>(
                     <CartStepItem key={item.id} item={item}/>
                 ))}
-                <p className="text-xl mt-5">Total: {total}$</p>
+                {context?.cart.map(item=>(
+                    <>
+                        <p className="text-start">{item.name}</p>
+                        <div className={`flex justify-between ${Styles.resume}`}>
+                            <span>{item.price}$ x {item.quantity}</span>
+                            <span>{item.price * item.quantity}$</span>
+                        </div>
+                    </>
+                ))}
+                <div className="flex justify-between">
+                    <p className="text-xl mt-5">Total</p>
+                    <p className="text-xl mt-5">{total}$</p>
+                </div>
             </motion.div>
             </>)}
         </div>
