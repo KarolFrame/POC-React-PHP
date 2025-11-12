@@ -1,22 +1,23 @@
 "use client";
 import styles from "./shipping-info.module.css"
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, forwardRef, useImperativeHandle } from "react";
 import { CheckoutContext } from "@/context/CheckoutContext";
 import { toast } from "react-toastify";
+import { ShippingInfo } from "@/context/CheckoutContext";
+import IconMaterial from "../icon-material/icon-material";
 
-interface ShippingStepProps {
-  onNext: () => void;
-  onBack: () => void;
+interface ShippingStepHandle {
+    handleSubmit: () =>void;
 }
 
-const ShippingStep = ({onNext, onBack}: ShippingStepProps) => {
+const ShippingStep = forwardRef<ShippingStepHandle, {}>((_props, ref) => {
     const context = useContext(CheckoutContext);
     const defaultForm={
         name:"",
         email:"", 
         address:"", 
         phone:""
-    };
+    } as ShippingInfo;
     const [form, setForm] = useState(context?.shipping || defaultForm)
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>{
@@ -61,30 +62,88 @@ const ShippingStep = ({onNext, onBack}: ShippingStepProps) => {
         toast.success("Shipping info saved");
     }
 
-    const handleSubmit = (e: React.FormEvent) =>{
-        e.preventDefault();
-
-        if(!_validateFields()) return;
-        
+    const handleSubmit = (): boolean => {
+        if (!_validateFields()) return false;
         _saveShippingInfo();
-        onNext();
+        return true;
     };
+
+    const handleFormSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        handleSubmit();
+    };
+
+    useImperativeHandle(ref, () => ({
+        handleSubmit,
+    }));
 
     return(<>
     <div className="m-5 p-2">
-        <h1 className="text-3xl mb-6 font-bold">Shipping Info</h1>
-        <form className="flex flex-col gap-3">
-            <input type="text" name="name" value={form.name} onChange={handleChange} placeholder="Name" className={styles.input} required/>
-            <input type="email" name="email" value={form.email} onChange={handleChange} placeholder="Email" className={styles.input} required/>
-            <input type="text" name="address" value={form.address} onChange={handleChange} placeholder="Address" className={styles.input} required/>
-            <input type="tel" name="phone" value={form.phone} onChange={handleChange} placeholder="Phone" className={styles.input} required/>
-            <div className="flex gap-5 justify-center">
-                <button className={styles.submitButton} onClick={onBack}>BACK</button>
-                <button type="submit" className={styles.submitButton} onClick={handleSubmit}>NEXT</button>
-            </div>
-        </form>
+    <h1 className="text-3xl mb-6 font-bold">Shipping Info</h1>
+    <form className="flex flex-col gap-3 justify-center content-center" onSubmit={handleFormSubmit}>
+        <div className="relative">
+        <input
+            type="text"
+            name="name"
+            value={form.name}
+            onChange={handleChange}
+            placeholder="Name"
+            className={`${styles.input} pl-10`}
+            required
+        />
+        <IconMaterial
+            ico="person"
+            className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400"
+        />
+        </div>
+        <div className="relative">
+        <input
+            type="email"
+            name="email"
+            value={form.email}
+            onChange={handleChange}
+            placeholder="Email"
+            className={`${styles.input} pl-10`}
+            required
+        />
+        <IconMaterial
+            ico="email"
+            className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400"
+        />
+        </div>
+        <div className="relative">
+        <input
+            type="text"
+            name="address"
+            value={form.address}
+            onChange={handleChange}
+            placeholder="Address"
+            className={`${styles.input} pl-10`}
+            required
+        />
+        <IconMaterial
+            ico="home"
+            className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400"
+        />
+        </div>
+        <div className="relative">
+        <input
+            type="tel"
+            name="phone"
+            value={form.phone}
+            onChange={handleChange}
+            placeholder="Phone"
+            className={`${styles.input} pl-10`}
+            required
+        />
+        <IconMaterial
+            ico="phone"
+            className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400"
+        />
+        </div>
+    </form>
     </div>
     </>);
-}
+})
 
 export default ShippingStep;

@@ -10,9 +10,7 @@ export default function Home() {
     <>
       <CheckoutProvider>
         <div className="w-full flex justify-center">
-          <div className="w-[50%]">
           <CheckoutFlow/>
-        </div>
         </div>
         
       </CheckoutProvider>

@@ -1,15 +1,15 @@
 "use client";
 import Styles from "./payment.module.css"
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, forwardRef, useImperativeHandle, Ref } from "react";
 import { CheckoutContext } from "@/context/CheckoutContext";
-import {toast} from "react-toastify";
-import { stat } from "fs";
+import { toast } from "react-toastify";
+import IconMaterial from "../icon-material/icon-material";
 
-interface PaymentStepProps {
-  onBack: () => void;
+interface PaymentStepHandle {
+    handlePay: () => Promise<boolean>;
 }
 
-const PaymentStep = ({onBack}: PaymentStepProps) =>{
+const PaymentStep = forwardRef<PaymentStepHandle, {}>((_props, ref) => {
     const context = useContext(CheckoutContext);
     const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
     const [methods, setMethods] = useState<any[]>([]);
@@ -52,7 +52,7 @@ const PaymentStep = ({onBack}: PaymentStepProps) =>{
         }
     };
 
-    const _validateSelectedMethod = () =>{
+    const _validateSelectedMethod = () => {
         if (!selected) {
             toast.error("Select a Payment method");
             return null;
@@ -85,40 +85,45 @@ const PaymentStep = ({onBack}: PaymentStepProps) =>{
         }
     };
 
-    useEffect(()=>{
+    useEffect(() => {
         _loadPaymentMethods()
     }, [])
 
 
-    const handlePay = async () =>{
+    const handlePay = async () : Promise<boolean> => {
         const selectedMethod = _validateSelectedMethod();
-
-        if(!selectedMethod) return;
+        if (!selectedMethod) return false;
 
         context?.setPayment(selectedMethod);
         
         const requestBody = _buildRequestBody(selectedMethod, context);
-        await _executePaymentRequest(requestBody);
+        const success = await _executePaymentRequest(requestBody);
+        return success;
     };
 
-    return(<>
-    <div className="m-5 p-2">
-      <h2 className="text-3xl font-bold mb-6">Payment</h2>
-      <div className="flex justify-center gap-6">
-        {methods.map(m => (
-            <label key={m.id}>
-            <input type="radio" checked={selected === m.id} onChange={() => setSelected(m.id)} />
-            {m.name}
-            </label>
-        ))}
-      </div>
-      <div className="flex gap-6 justify-center">
-        <button className={Styles.payButton} onClick={onBack}>BACK</button>
-        <button className={Styles.payButton} onClick={handlePay}>PAY</button>
-      </div>      
-    </div>
+    useImperativeHandle(ref, () => ({
+        handlePay,
+    }));
 
+    return (<>
+        <div className="m-5 p-2">
+            <h2 className="text-3xl font-bold mb-6">Payment</h2>
+            <div className="flex gap-4 justify-center flex-wrap">
+                {methods.map(m => (
+                    <div
+                    key={m.id}
+                    onClick={() => setSelected(m.id)}
+                    className={`flex flex-col items-center justify-center gap-2 p-3 border rounded cursor-pointer transition
+                                w-32 h-32
+                                ${selected === m.id ? Styles["selected-method"] : "border-gray-300"}`}
+                    >
+                    <IconMaterial ico={m.icon || "credit_card"} className="text-3xl" />
+                    <span className="text-center">{m.name}</span>
+                    </div>
+                ))}
+            </div>
+        </div>
     </>);
-}
+});
 
 export default PaymentStep;

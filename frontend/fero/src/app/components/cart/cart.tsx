@@ -57,7 +57,7 @@ const CartStep = ( {onNext}: CartStepProps) =>{
     const total = context?.cart.reduce((state, item) => state + item.price * item.quantity, 0);
 
     return(<>
-        <div className="m-5 p-2">
+        <div className={`m-5 `}>
             {loading && (<>
                 <LoaderWrapper>
                     <LoaderComponent/>
@@ -71,12 +71,11 @@ const CartStep = ( {onNext}: CartStepProps) =>{
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 100 }}
             transition={{ duration: 0.5 }}>
-                <h2 className="text-3xl font-bold">CART REVIEW</h2>
+                <h2 className="text-3xl font-bold mb-5">CART REVIEW</h2>
                 {context?.cart.map(item=>(
                     <CartStepItem key={item.id} item={item}/>
                 ))}
                 <p className="text-xl mt-5">Total: {total}$</p>
-                <button className={Styles.nextButton} onClick={onNext}>NEXT</button>
             </motion.div>
             </>)}
         </div>

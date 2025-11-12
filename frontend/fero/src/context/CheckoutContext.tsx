@@ -1,7 +1,7 @@
 "use client";
 import { createContext, useState, ReactNode } from "react";
 
-interface ShippingInfo {
+export interface ShippingInfo {
   name: string;
   email: string;
   address: string;
